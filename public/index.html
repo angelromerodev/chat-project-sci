@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UPV Chat</title>
+  <style>
+    body { font-family: system-ui, Arial; margin: 0; }
+    header { padding: 12px 16px; border-bottom: 1px solid #ddd; display:flex; gap:12px; align-items:center; }
+    main { display: grid; grid-template-columns: 320px 1fr; height: calc(100vh - 56px); }
+    #left { border-right: 1px solid #ddd; padding: 12px; overflow:auto; }
+    #right { padding: 12px; display:flex; flex-direction:column; gap:10px; }
+    #users { list-style: none; padding: 0; margin: 0; display:flex; flex-direction:column; gap:6px; }
+    .user { border:1px solid #ddd; padding:8px; border-radius:8px; cursor:pointer; display:flex; justify-content:space-between; gap:10px; }
+    .user small { color:#666; }
+    .online { color: #0a7; font-weight: 600; }
+    .offline { color: #999; }
+    #chat { flex:1; border:1px solid #ddd; border-radius:8px; padding:10px; overflow:auto; background:#fafafa; }
+    .msg { margin: 6px 0; }
+    .me { text-align: right; }
+    .meta { color:#666; font-size: 12px; }
+    #composer { display:flex; gap:8px; }
+    #text { flex:1; padding:10px; }
+    button { padding:10px 12px; }
+    dialog { border: none; border-radius: 10px; padding: 16px; width: min(520px, 92vw); }
+    dialog::backdrop { background: rgba(0,0,0,.4); }
+    .row { display:flex; gap:10px; }
+    .row > * { flex:1; }
+    .hint { color:#666; font-size: 13px; margin-top: 8px; }
+    #status { margin-left:auto; font-size: 13px; color:#666; }
+    hr { border: none; border-top: 1px solid #eee; margin: 16px 0; }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>UPV Chat</strong>
+    <span id="me"></span>
+    <span id="status">Desconectado</span>
+  </header>
+
+  <main>
+    <section id="left">
+      <h3>Usuarios</h3>
+      <ul id="users"></ul>
+      <p class="hint">Haz click en un usuario para chatear.</p>
+    </section>
+
+    <section id="right">
+      <h3 id="chatTitle">Selecciona un usuario…</h3>
+      <div id="chat"></div>
+
+      <form id="composer">
+        <input id="text" autocomplete="off" placeholder="Escribe un mensaje…" disabled />
+        <button id="send" type="submit" disabled>Enviar</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- Modal login/registro (se abre con showModal() y se cierra con close()) [web:123] -->
+  <dialog id="loginDialog">
+    <h3>Entrar</h3>
+    <form id="loginForm">
+      <div class="row">
+        <label>
+          Usuario o email
+          <input id="login" required />
+        </label>
+        <label>
+          Contraseña
+          <input id="password" type="password" required />
+        </label>
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top: 12px;">
+        <button type="submit">Login</button>
+        <button type="button" id="logoutBtn">Salir</button>
+      </div>
+
+      <p class="hint" id="loginError"></p>
+    </form>
+
+    <hr>
+
+    <h3>Registro</h3>
+    <form id="registerForm">
+      <div class="row">
+        <label>
+          Usuario
+          <input id="regUsername" minlength="3" required />
+        </label>
+        <label>
+          Email
+          <!-- type=email activa validación básica del navegador [web:127] -->
+          <input id="regEmail" type="email" required />
+        </label>
+      </div>
+
+      <div class="row" style="margin-top:10px;">
+        <label>
+          Contraseña
+          <input id="regPassword" type="password" minlength="6" required />
+        </label>
+        <label>
+          Repite contraseña
+          <input id="regPassword2" type="password" minlength="6" required />
+        </label>
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top: 12px;">
+        <button type="submit">Crear cuenta</button>
+      </div>
+
+      <p class="hint" id="registerError"></p>
+    </form>
+  </dialog>
+
+  <script src="./main.js"></script>
+</body>
+</html>
